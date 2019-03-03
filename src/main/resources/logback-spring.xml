@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true">
+    <property name="LOG_HOME" value="logs" />
+    <property name="APP_NAME" value="app-console" />
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%date [%thread] %highlight(%-5level) %cyan(%logger{36}) \(%M\):%L - %message%n
+            </pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>DEBUG</level>
+        </filter>
+    </appender>
+
+    <appender name="app" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>8</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%thread]-[%-5level] [%logger{36}:%line] - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="error" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/error.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOG_HOME}/error.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <!--<append>true</append>-->
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%thread]-[%-5level] [%logger{36}:%line] - %message%n</pattern>
+        </encoder>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <appender name="sqlAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/sql.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/sql.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>8</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%thread]-[%-5level] %logger{16} - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="mqAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/mq.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/mq.%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>8</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d [%thread]-[%-5level] %logger{16} - %message%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="MQ_EVENT" level="INFO" additivity="false">
+        <appender-ref ref="mqAppender" />
+    </logger>
+
+    <!-- jpa sql output-->
+    <logger name="org.hibernate.SQL" level="DEBUG" additivity="false">
+        <appender-ref ref="sqlAppender" />
+    </logger>
+    <!-- jpa sql params-->
+    <!--org.hibernate.type.descriptor.sql.BasicExtractor  输出结果-->
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder" level="TRACE" additivity="false">
+        <appender-ref ref="sqlAppender" />
+    </logger>
+    <!-- jpa sql error-->
+    <logger name="org.hibernate.engine.jdbc.spi.SqlExceptionHelper" level="WARN" additivity="false">
+        <appender-ref ref="sqlAppender" />
+    </logger>
+
+    <!-- jpa 事务 -->
+    <logger name="org.springframework.orm.jpa.JpaTransactionManager" level="DEBUG"
+        additivity="false">
+        <appender-ref ref="sqlAppender" />
+    </logger>
+
+    <!-- 应用以外的日志收集 -->
+    <root level="INFO">
+        <appender-ref ref="console" />
+        <appender-ref ref="app" />
+        <appender-ref ref="error" />
+    </root>
+
+</configuration>

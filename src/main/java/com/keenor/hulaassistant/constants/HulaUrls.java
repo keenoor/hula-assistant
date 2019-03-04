@@ -18,6 +18,9 @@ public class HulaUrls {
 
     public static final String API_TIMES_TODAY = "/api/times/today";
 
+    public static final String API_FIELDS = "/api/fields";
+
+    public static final String API_TIMES = "/api/times";
 
 
 }

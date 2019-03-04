@@ -20,8 +20,8 @@ public class BookingServiceTest {
 
     @Test
     public void order() {
-        JsonElement order = bookingService.order();
-        System.out.println(order);
+        int code = bookingService.order(15);
+        System.out.println(code);
     }
 
 }

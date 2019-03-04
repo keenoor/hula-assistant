@@ -8,13 +8,17 @@ import com.keenoor.toolkit.utils.GsonUtil;
 import com.keenor.hulaassistant.constants.Consts;
 import com.keenor.hulaassistant.constants.TestJson;
 import com.keenor.hulaassistant.handler.ReqHandler;
+import com.keenor.hulaassistant.pojo.req.Field;
 import com.keenor.hulaassistant.pojo.req.OrderReq;
+import com.keenor.hulaassistant.pojo.resp.RawField;
+import com.keenor.hulaassistant.pojo.resp.RawTime;
 import com.keenor.hulaassistant.pojo.vo.MyOrderVo;
 import com.keenor.hulaassistant.util.BizUtils;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -28,11 +32,17 @@ public class BookingService {
     @Resource
     ReqHandler reqHandler;
 
+    public final static long ORDER_DATE = 1552345524000L;
+
+    final int FIELD = 12;
+    final int TIME_1 = 18;
+    final int TIME_2 = 19;
+
     public List<MyOrderVo> getMyOrders() {
 
         List<MyOrderVo> orderVoList = Lists.newArrayList();
         reqHandler.getOrder().getOrderLists()
-                .forEach(i->{
+                .forEach(i -> {
                     MyOrderVo vo = new MyOrderVo();
                     BeanUtils.copyProperties(i, vo);
                     orderVoList.add(vo);
@@ -41,17 +51,55 @@ public class BookingService {
         return orderVoList;
     }
 
-    public JsonElement order(){
+    public int order(int fieldNum) {
+        log.info("ordering... {}", fieldNum);
+
+        OrderReq req = new OrderReq();
+        req.set_org(Consts.ORG);
+        req.set_member(Consts.MEMBER);
+        req.setOpenid(Consts.OPEN_ID);
+        req.setOrderDate(ORDER_DATE);
+
         Long nowTime = reqHandler.getNowTime();
         String randomStr = BizUtils.getRandomStr();
         String sign = BizUtils.getSign(Consts.MEMBER, nowTime, randomStr);
-
-        OrderReq req = GsonUtil.parseObj(TestJson.postJson, OrderReq.class);
         req.setNowStr(nowTime);
         req.setRandomStr(randomStr);
         req.setSign(sign);
-        JsonElement order = reqHandler.order(GsonUtil.toJson(req));
+
+        RawField rawField = reqHandler.getFields().getFields().get(FIELD - 1);
+        List<RawTime> rawTimeList = reqHandler.getTimes().getTimes();
+
+        OrderReq.OrderItem orderItem1 = new OrderReq.OrderItem();
+        OrderReq.OrderItem orderItem2 = new OrderReq.OrderItem();
+        orderItem1.set_field(rawField.get_id());
+        orderItem1.setFName(rawField.getName());
+        orderItem1.setPrice(54);
+        BeanUtils.copyProperties(orderItem1, orderItem2);
+
+        RawTime rawTime1 = rawTimeList.get(12 - 1);
+        orderItem1.set_time(rawTime1.get_id());
+        orderItem1.setShowDate(rawTime1.getShowDate());
+        RawTime rawTime2 = rawTimeList.get(13 - 1);
+        orderItem2.set_time(rawTime2.get_id());
+        orderItem2.setShowDate(rawTime2.getShowDate());
+
+        List<OrderReq.OrderItem> orderArr = Lists.newArrayList();
+        orderArr.add(orderItem1);
+        orderArr.add(orderItem2);
+        req.setOrderArr(orderArr);
+
+        int order;
+        try {
+            order = reqHandler.order(GsonUtil.toJson(req));
+        } catch (Exception e) {
+            log.error("", e);
+            return 430;
+        }
+
+        log.info("ordering end ... {}", fieldNum);
         return order;
     }
+
 
 }

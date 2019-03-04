@@ -20,24 +20,24 @@ import java.io.Serializable;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OldResult<T> implements Serializable {
 
-    private String code;
+    private Integer code;
     private T data;
 
-    public OldResult(String code) {
+    public OldResult(Integer code) {
         this.code = code;
     }
 
-    private OldResult(String code, T data) {
+    private OldResult(Integer code, T data) {
         this.code = code;
         this.data = data;
     }
 
     @JsonIgnore //使之不在json序列化结果当中
     public boolean isSuccess() {
-        return ResponseCode.SUCCESS.name().equals(this.code);
+        return 200 == this.code;
     }
 
-    public String getCode() {
+    public Integer getCode() {
         return code;
     }
 
@@ -47,22 +47,22 @@ public class OldResult<T> implements Serializable {
 
 
     public static <T> OldResult<T> ofSuccess() {
-        return new OldResult<T>(ResponseCode.SUCCESS.name());
+        return new OldResult<T>(200);
     }
 
     public static <T> OldResult<T> ofSuccess(T detail) {
-        return new OldResult<T>(ResponseCode.SUCCESS.name(), detail);
+        return new OldResult<T>(200, detail);
     }
 
     public static <T> OldResult<T> ofError() {
-        return new OldResult<T>(ResponseCode.ERROR.name());
+        return new OldResult<T>(500);
     }
 
     public static <T> OldResult<T> ofErrorMsg(T errorMessage) {
-        return new OldResult<T>(ResponseCode.ERROR.name(), errorMessage);
+        return new OldResult<T>(500, errorMessage);
     }
 
-    public static <T> OldResult<T> ofErrorCodeMsg(String errorCode, T errorMessage) {
+    public static <T> OldResult<T> ofErrorCodeMsg(Integer errorCode, T errorMessage) {
         return new OldResult<T>(errorCode, errorMessage);
     }
 

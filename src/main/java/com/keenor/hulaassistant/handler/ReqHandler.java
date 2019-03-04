@@ -126,6 +126,7 @@ public class ReqHandler {
             log.error("", e.getStatusLine());
             throw new BizException(ResponseCode.ERROR, e);
         }
+        log.info(result.getData().toString());
         return result.getCode();
     }
 

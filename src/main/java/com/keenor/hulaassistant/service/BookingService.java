@@ -67,7 +67,7 @@ public class BookingService {
         req.setRandomStr(randomStr);
         req.setSign(sign);
 
-        RawField rawField = reqHandler.getFields().getFields().get(FIELD - 1);
+        RawField rawField = reqHandler.getFields().getFields().get(fieldNum - 1);
         List<RawTime> rawTimeList = reqHandler.getTimes().getTimes();
 
         OrderReq.OrderItem orderItem1 = new OrderReq.OrderItem();

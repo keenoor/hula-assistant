@@ -77,12 +77,12 @@ public class FieldTask {
             int fieldNum = 15;
             for (int i = 0; i < 5; i++) {
                 int code = bookingService.order(fieldNum);
+                fieldNum = fieldNum - 3;
                 if (code == 200) {
+                    log.info("haha... 抢到场子了");
                     stopJob();
                     ifSuccess = true;
                     break;
-                } else {
-                    bookingService.order(fieldNum - 3);
                 }
             }
         }

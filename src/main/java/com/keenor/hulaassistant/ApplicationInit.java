@@ -17,7 +17,7 @@ import javax.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@Component
+//@Component
 public class ApplicationInit implements CommandLineRunner {
 
     @Resource
@@ -30,7 +30,7 @@ public class ApplicationInit implements CommandLineRunner {
 
         log.info("start fieldJob... ");
         Calendar date = new Calendar.Builder()
-                .setDate(2019, 2, 5)
+                .setDate(2019, 2, 12)
                 .setTimeOfDay(6, 59, 0)
                 .setTimeZone(TimeZone.getDefault())
                 .build();

@@ -37,11 +37,10 @@ public class FieldTask {
 
     private boolean ifSuccess = false;
 
-//    @Scheduled(cron = "0 26 2 ? * 3")
-    @Scheduled(cron = "0/5 * * * * *")
+    @Scheduled(cron = "0 59 6 ? * 2")
     public void fieldJob() {
-        log.info("start fieldJob... ");
-//        startJob();
+        log.info("start fieldJob...");
+        startJob();
     }
 
     //    @Scheduled(fixedRate = 1000)

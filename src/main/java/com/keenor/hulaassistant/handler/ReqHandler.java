@@ -45,8 +45,8 @@ public class ReqHandler {
                     .params(map).type(new TypeToken<OldResult<MyOrderResp>>() {
                     })
                     .execute();
-        } catch (
-                HttpCodeException e) {
+        } catch (HttpCodeException e) {
+            log.error("--> {}", e.getStatusLine());
             throw new BizException(ResponseCode.ERROR, e);
         }
 
@@ -61,8 +61,8 @@ public class ReqHandler {
                     .type(new TypeToken<OldResult<Long>>() {
                     })
                     .execute();
-        } catch (
-                HttpCodeException e) {
+        } catch (HttpCodeException e) {
+            log.error("--> {}", e.getStatusLine());
             throw new BizException(ResponseCode.ERROR, e);
         }
         return result.getData();
@@ -83,8 +83,8 @@ public class ReqHandler {
                     .type(new TypeToken<OldResult<FieldResp>>() {
                     })
                     .execute();
-        } catch (
-                HttpCodeException e) {
+        } catch (HttpCodeException e) {
+            log.error("--> {}", e.getStatusLine());
             throw new BizException(ResponseCode.ERROR, e);
         }
         return result.getData();
@@ -102,12 +102,11 @@ public class ReqHandler {
         try {
             result = HttpClientUtil
                     .<OldResult<TimeResp>>get(HOST + API_TIMES)
-                    .params(map)
-                    .type(new TypeToken<OldResult<TimeResp>>() {
+                    .params(map).type(new TypeToken<OldResult<TimeResp>>() {
                     })
                     .execute();
-        } catch (
-                HttpCodeException e) {
+        } catch (HttpCodeException e) {
+            log.error("--> {}", e.getStatusLine());
             throw new BizException(ResponseCode.ERROR, e);
         }
         return result.getData();
@@ -123,7 +122,7 @@ public class ReqHandler {
                     })
                     .execute();
         } catch (HttpCodeException e) {
-            log.error("", e.getStatusLine());
+            log.error("--> {}", e.getStatusLine());
             throw new BizException(ResponseCode.ERROR, e);
         }
         log.info(result.getData().toString());

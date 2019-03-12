@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.LongBinaryOperator;
 
 import javax.annotation.Resource;
 
@@ -32,11 +33,15 @@ public class BookingService {
     @Resource
     ReqHandler reqHandler;
 
-    public final static long ORDER_DATE = 1552345524000L;
+    public final static long ORDER_DATE = 1552406460000L;
 
     final int FIELD = 12;
     final int TIME_1 = 18;
     final int TIME_2 = 19;
+
+    public Long getTodayTime() {
+        return reqHandler.getNowTime();
+    }
 
     public List<MyOrderVo> getMyOrders() {
 
@@ -52,7 +57,7 @@ public class BookingService {
     }
 
     public int order(int fieldNum) {
-        log.info("ordering... {}", fieldNum);
+        log.info("ordering number ... {}", fieldNum);
 
         OrderReq req = new OrderReq();
         req.set_org(Consts.ORG);

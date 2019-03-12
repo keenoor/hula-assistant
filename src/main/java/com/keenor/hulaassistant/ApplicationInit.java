@@ -26,18 +26,7 @@ public class ApplicationInit implements CommandLineRunner {
     private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @Override
-    public void run(String... args) throws Exception {
-
-        log.info("start fieldJob... ");
-        Calendar date = new Calendar.Builder()
-                .setDate(2019, 2, 12)
-                .setTimeOfDay(6, 59, 0)
-                .setTimeZone(TimeZone.getDefault())
-                .build();
-        log.info("date: {}", DateFormatUtils.format(date, "yyyy-MM-dd HH:mm:ss"));
-
-        threadPoolTaskScheduler.schedule(() -> {
-            fieldTask.startJob();
-        }, date.getTime());
+    public void run(String... args) {
+        fieldTask.fieldJob();
     }
 }

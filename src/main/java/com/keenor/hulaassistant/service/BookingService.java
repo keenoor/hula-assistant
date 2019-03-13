@@ -33,11 +33,10 @@ public class BookingService {
     @Resource
     ReqHandler reqHandler;
 
-    public final static long ORDER_DATE = 1552406460000L;
+    public final static long ORDER_DATE = 1553122830000L;
 
-    final int FIELD = 12;
-    final int TIME_1 = 18;
-    final int TIME_2 = 19;
+    private final static int TIME_1 = 18;
+    private final static int TIME_2 = 19;
 
     public Long getTodayTime() {
         return reqHandler.getNowTime();
@@ -82,10 +81,10 @@ public class BookingService {
         orderItem1.setPrice(54);
         BeanUtils.copyProperties(orderItem1, orderItem2);
 
-        RawTime rawTime1 = rawTimeList.get(12 - 1);
+        RawTime rawTime1 = rawTimeList.get(TIME_1 - 7);
         orderItem1.set_time(rawTime1.get_id());
         orderItem1.setShowDate(rawTime1.getShowDate());
-        RawTime rawTime2 = rawTimeList.get(13 - 1);
+        RawTime rawTime2 = rawTimeList.get(TIME_2 - 7);
         orderItem2.set_time(rawTime2.get_id());
         orderItem2.setShowDate(rawTime2.getShowDate());
 

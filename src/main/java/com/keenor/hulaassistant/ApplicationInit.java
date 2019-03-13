@@ -22,8 +22,6 @@ public class ApplicationInit implements CommandLineRunner {
 
     @Resource
     FieldTask fieldTask;
-    @Resource
-    private ThreadPoolTaskScheduler threadPoolTaskScheduler;
 
     @Override
     public void run(String... args) {

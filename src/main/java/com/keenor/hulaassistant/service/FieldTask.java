@@ -1,5 +1,7 @@
 package com.keenor.hulaassistant.service;
 
+import com.google.common.collect.Lists;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -14,6 +16,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -49,7 +52,7 @@ public class FieldTask {
 
     private volatile boolean ifSuccess = false;
 
-    @Scheduled(cron = "50 59 6 ? * 3")
+    @Scheduled(cron = "50 59 6 ? * 4")
     public void fieldJob() {
         log.info("start fieldJob...");
         while (true) {
@@ -71,7 +74,7 @@ public class FieldTask {
         }
     }
 
-    @Scheduled(cron = "30 1 7 ? * 3")
+    @Scheduled(cron = "0 1 7 ? * 4")
     public void fieldJobStop() {
         log.info("stop fieldJob...");
         stopJob();
@@ -105,16 +108,17 @@ public class FieldTask {
                 if (ifSuccess) {
                     return;
                 }
-                Future<Integer> future = null;
+                List<Future<Integer>> futureList = Lists.newArrayList();
                 for (int j = i; j < i + 3; j++) {
                     int k = j;
-                    future = fixedThreadPool.submit(
+                    Future<Integer> future = fixedThreadPool.submit(
                             () -> bookingService.order(k + 1));
+                    futureList.add(future);
                 }
-                while (future != null && !future.isDone()) {
+                for (Future<Integer> fu : futureList) {
                     Integer code;
                     try {
-                        code = future.get(3, TimeUnit.SECONDS);
+                        code = fu.get(3, TimeUnit.SECONDS);
                     } catch (InterruptedException | ExecutionException | TimeoutException e) {
                         e.printStackTrace();
                         continue;

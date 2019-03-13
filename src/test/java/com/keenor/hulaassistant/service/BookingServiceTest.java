@@ -20,7 +20,7 @@ public class BookingServiceTest {
 
     @Test
     public void order() {
-        int code = bookingService.order(15);
+        int code = bookingService.order(12);
         System.out.println(code);
     }
 

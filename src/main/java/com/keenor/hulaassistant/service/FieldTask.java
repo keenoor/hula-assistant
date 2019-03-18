@@ -1,7 +1,9 @@
 package com.keenor.hulaassistant.service;
 
 import com.google.common.collect.Lists;
+import com.keenor.hulaassistant.config.ConfigProperties;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -52,7 +54,7 @@ public class FieldTask {
 
     private volatile boolean ifSuccess = false;
 
-    @Scheduled(cron = "50 59 6 ? * 4")
+    @Scheduled(cron = "${keenor.start-cron}")
     public void fieldJob() {
         log.info("start fieldJob...");
         while (true) {
@@ -67,14 +69,14 @@ public class FieldTask {
                 break;
             }
             try {
-                Thread.sleep(1000);
+                Thread.sleep(500);
             } catch (InterruptedException e) {
                 log.error("", e);
             }
         }
     }
 
-    @Scheduled(cron = "0 1 7 ? * 4")
+    @Scheduled(cron = "${keenor.end-cron}")
     public void fieldJobStop() {
         log.info("stop fieldJob...");
         stopJob();

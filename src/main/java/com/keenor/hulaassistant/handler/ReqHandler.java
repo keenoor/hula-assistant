@@ -6,6 +6,7 @@ import com.google.gson.reflect.TypeToken;
 import com.keenoor.toolkit.utils.httpclient.HttpClientUtil;
 import com.keenoor.toolkit.utils.httpclient.HttpCodeException;
 import com.keenor.hulaassistant.config.BizException;
+import com.keenor.hulaassistant.config.ConfigProperties;
 import com.keenor.hulaassistant.config.ResponseCode;
 import com.keenor.hulaassistant.constants.Consts;
 import com.keenor.hulaassistant.pojo.base.OldResult;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.annotation.Resource;
 
 import lombok.extern.slf4j.Slf4j;
 import sun.rmi.runtime.Log;
@@ -32,6 +35,8 @@ import static com.keenor.hulaassistant.constants.HulaUrls.HOST;
 @Slf4j
 @Component
 public class ReqHandler {
+    @Resource
+    private ConfigProperties configProperties;
 
     public MyOrderResp getOrder() {
         HashMap<String, Object> map = Maps.newHashMap();
@@ -95,7 +100,7 @@ public class ReqHandler {
         map.put("_item", Consts.ITEM);
         map.put("_org", Consts.ORG);
         map.put("_venue", Consts.VENUE);
-        map.put("orderDate", BookingService.ORDER_DATE);
+        map.put("orderDate", configProperties.getOrderDate());
         map.put("sortBy", "startDate");
 
         OldResult<TimeResp> result;

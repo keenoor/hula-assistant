@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.reflect.TypeToken;
 import com.keenoor.toolkit.utils.GsonUtil;
+import com.keenor.hulaassistant.config.ConfigProperties;
 import com.keenor.hulaassistant.constants.Consts;
 import com.keenor.hulaassistant.constants.TestJson;
 import com.keenor.hulaassistant.handler.ReqHandler;
@@ -31,9 +32,9 @@ import lombok.extern.slf4j.Slf4j;
 public class BookingService {
 
     @Resource
+    private ConfigProperties configProperties;
+    @Resource
     ReqHandler reqHandler;
-
-    public final static long ORDER_DATE = 1553122830000L;
 
     private final static int TIME_1 = 18;
     private final static int TIME_2 = 19;
@@ -62,7 +63,7 @@ public class BookingService {
         req.set_org(Consts.ORG);
         req.set_member(Consts.MEMBER);
         req.setOpenid(Consts.OPEN_ID);
-        req.setOrderDate(ORDER_DATE);
+        req.setOrderDate(configProperties.getOrderDate());
 
         Long nowTime = reqHandler.getNowTime();
         String randomStr = BizUtils.getRandomStr();

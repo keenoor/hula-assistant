@@ -100,7 +100,7 @@ public class ReqHandler {
         map.put("_item", Consts.ITEM);
         map.put("_org", Consts.ORG);
         map.put("_venue", Consts.VENUE);
-        map.put("orderDate", configProperties.getOrderDate());
+//        map.put("orderDate", configProperties.getOrderDate());
         map.put("sortBy", "startDate");
 
         OldResult<TimeResp> result;

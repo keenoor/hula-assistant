@@ -20,7 +20,6 @@ import lombok.Setter;
 @Component
 public class ConfigProperties {
 
-    private Long orderDate;
     private String startCron;
     private String endCron;
 

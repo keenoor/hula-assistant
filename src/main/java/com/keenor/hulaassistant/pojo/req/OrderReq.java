@@ -27,6 +27,8 @@ public class OrderReq {
     private String openid;
     private Long orderDate;
     private String payment = "member";
+    private String thirdName = "微信";
+    private String thirdSerect = "微信";
     private Long nowStr;
     private String randomStr;
     private String sign;

@@ -19,8 +19,14 @@ import com.keenor.hulaassistant.util.BizUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.LongBinaryOperator;
 
 import javax.annotation.Resource;
@@ -63,7 +69,9 @@ public class BookingService {
         req.set_org(Consts.ORG);
         req.set_member(Consts.MEMBER);
         req.setOpenid(Consts.OPEN_ID);
-        req.setOrderDate(configProperties.getOrderDate());
+        long orderDate = LocalDateTime.now()
+                .plus(7, ChronoUnit.DAYS).toInstant(ZoneOffset.of("+8")).toEpochMilli();
+        req.setOrderDate(orderDate);
 
         Long nowTime = reqHandler.getNowTime();
         String randomStr = BizUtils.getRandomStr();

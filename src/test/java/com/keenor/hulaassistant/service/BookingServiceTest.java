@@ -9,14 +9,19 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 
+import lombok.extern.slf4j.Slf4j;
+
 import static org.junit.Assert.*;
 
+@Slf4j
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class BookingServiceTest {
 
     @Resource
     BookingService bookingService;
+    @Resource
+    VoteService voteService;
 
     @Test
     public void order() {
@@ -24,4 +29,11 @@ public class BookingServiceTest {
         System.out.println(code);
     }
 
+    @Test
+    public void voteInfo() {
+        int count = voteService.statistic();
+        log.info(count + " +++");
+    }
+
 }
+

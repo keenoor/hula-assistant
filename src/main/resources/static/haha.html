@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
+    </script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+
+</head>
+<body>
+<div>
+    <input type="file" id="files" style="display:none" onchange="import2();"/>
+    <input type="button" id="import" value="导入"/>
+</div>
+
+<script type="text/javascript">
+    document.write("Hello World!");
+
+    $("#import").click(function () {//点击导入按钮，使files触发点击事件，然后完成读取文件的操作。
+        $("#files").click();
+    });
+
+    function import2() {
+        var selectedFile = document.getElementById("files").files[0];//获取读取的File对象
+        var name = selectedFile.name;//读取选中文件的文件名
+        var size = selectedFile.size;//读取选中文件的大小
+        console.log("文件名:" + name + "大小：" + size);
+
+        var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
+        // reader.readAsText(selectedFile);//读取文件的内容
+        reader.readAsBinaryString(selectedFile);//读取文件的内容
+
+        // var workbook = XLSX.readFile(reader);
+        // console.log(workbook);
+
+        reader.onload = function () {
+            // console.log(this.result);//当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
+            var workbook = XLSX.read(this.result, {type: 'binary'});
+            console.log(workbook);
+
+            var sheetNames = workbook.SheetNames;
+            var worksheet = workbook.Sheets[sheetNames[0]];
+            var json = XLSX.utils.sheet_to_json(worksheet);
+            console.log(json);
+
+        };
+
+    }
+
+    // 读取本地excel文件
+    // function readWorkbookFromLocalFile(file, callback) {
+    //     var reader = new FileReader();
+    //     reader.onload = function (e) {
+    //         var data = e.target.result;
+    //         var workbook = XLSX.read(data, {type: 'binary'});
+    //         if (callback) callback(workbook);
+    //     };
+    //     reader.readAsBinaryString(file);
+    // }
+</script>
+
+</body>
+
+</html>

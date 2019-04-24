@@ -1,30 +1,24 @@
 package com.keenor.hulaassistant.service;
 
 import com.google.common.collect.Lists;
-import com.keenor.hulaassistant.config.ConfigProperties;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.scheduling.support.PeriodicTrigger;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -51,8 +45,6 @@ public class FieldTask {
     public ThreadPoolTaskScheduler threadPoolTaskScheduler() {
         return new ThreadPoolTaskScheduler();
     }
-
-    private volatile boolean ifSuccess = false;
 
     @Scheduled(cron = "${keenor.start-cron}")
     public void fieldJob() {
@@ -102,14 +94,7 @@ public class FieldTask {
         public void run() {
             log.info("job run... {}", new Date());
 
-            if (ifSuccess) {
-                return;
-            }
-
             for (int i = 0; i < 15; i += 3) {
-                if (ifSuccess) {
-                    return;
-                }
                 List<Future<Integer>> futureList = Lists.newArrayList();
                 for (int j = i; j < i + 3; j++) {
                     int k = j;
@@ -127,7 +112,6 @@ public class FieldTask {
                     }
                     if (code == 200) {
                         log.info("haha... 抢到场子了");
-                        ifSuccess = true;
                         future.cancel(true);
                         stopJob();
                         break;

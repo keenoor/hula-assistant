@@ -4,63 +4,112 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">
-    </script>
+    <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
-
 </head>
+
 <body>
-<div>
-    <input type="file" id="files" style="display:none" onchange="import2();"/>
+<div style="background: aqua; padding: 10px;">
+    <input type="file" id="files" style="display:none" onchange="readExcel();"/>
     <input type="button" id="import" value="导入"/>
+    <input type="button" id="check" value="检查" onclick="check()"/>
 </div>
 
 <script type="text/javascript">
-    document.write("Hello World!");
+    document.write("操作步骤：");
+    // document.write("1. 导入excel");
+    // document.write("2. 检查身份证姓名的匹配，注意观察日志");
+    // document.write("3. 检查住址规范，注意观察日志");
+    // document.write("4. 填写并保存");
+    // document.write("5. 若检查不通过，请修改 excel 数据再试");
 
-    $("#import").click(function () {//点击导入按钮，使files触发点击事件，然后完成读取文件的操作。
+    var json = '';
+
+    $("#import").click(function () {
         $("#files").click();
     });
 
-    function import2() {
+    function readExcel() {
+        console.log('dfghjkljhgfhjkhgfdgh');
         var selectedFile = document.getElementById("files").files[0];//获取读取的File对象
-        var name = selectedFile.name;//读取选中文件的文件名
-        var size = selectedFile.size;//读取选中文件的大小
-        console.log("文件名:" + name + "大小：" + size);
+        var name = selectedFile.name;
+        var size = selectedFile.size;
+        console.log("文件名: " + name + "大小：" + size);
 
-        var reader = new FileReader();//这里是核心！！！读取操作就是由它完成的。
-        // reader.readAsText(selectedFile);//读取文件的内容
-        reader.readAsBinaryString(selectedFile);//读取文件的内容
-
-        // var workbook = XLSX.readFile(reader);
-        // console.log(workbook);
-
+        var reader = new FileReader();
+        reader.readAsBinaryString(selectedFile);
         reader.onload = function () {
-            // console.log(this.result);//当读取完成之后会回调这个函数，然后此时文件的内容存储到了result中。直接操作即可。
             var workbook = XLSX.read(this.result, {type: 'binary'});
-            console.log(workbook);
-
+            // console.log(workbook);
             var sheetNames = workbook.SheetNames;
             var worksheet = workbook.Sheets[sheetNames[0]];
-            var json = XLSX.utils.sheet_to_json(worksheet);
+            json = XLSX.utils.sheet_to_json(worksheet);
             console.log(json);
-
         };
-
     }
 
-    // 读取本地excel文件
-    // function readWorkbookFromLocalFile(file, callback) {
-    //     var reader = new FileReader();
-    //     reader.onload = function (e) {
-    //         var data = e.target.result;
-    //         var workbook = XLSX.read(data, {type: 'binary'});
-    //         if (callback) callback(workbook);
-    //     };
-    //     reader.readAsBinaryString(file);
-    // }
+    function check() {
+        for (var i = 0; i < json.length; i++) {
+            var zsxm = json[i].name.trim();
+            var card = json[i].card.trim();
+            var address = json[i].address.trim();
+
+            $.ajax({
+                type: "post",
+                url: "/zfp/com/loginoutservice/checkmessage",
+                data: {
+                    card: card,
+                    zsxm: zsxm
+                },
+                async: false,
+                success: function (data) {
+                    if (data === 'OK') {
+                        console.log(i + 1 + ' 检验成功-> ' + zsxm + '\n');
+                    } else {
+                        console.error(i + 1 + ' 检验失败-> ' + zsxm + '\n');
+                    }
+                }
+            });
+        }
+    }
+
+    function handleCity() {
+        var addr = '浙江省杭州市西湖区文三西路100号';
+        var addr2 = '北京市海淀区人大附中';
+        var addr22 = '重庆市市奉节县船夫村';
+        var addr3 = '湖北省孝感市安陆市小河乡';
+
+        var rg = /^[\u4e00-\u9fa5]{2,3}省[\u4e00-\u9fa5]+市[\u4e00-\u9fa5]+市.+$/;
+        var rg2 = /^[\u4e00-\u9fa5]{2}市[\u4e00-\u9fa5]+([区县]).+$/;
+        var rg3 = /^[\u4e00-\u9fa5]{2,3}省[\u4e00-\u9fa5]+市[\u4e00-\u9fa5]+市.+$/;
+        var rg4 = /^([\u4e00-\u9fa5]{2,3}省)([\u4e00-\u9fa5]+市)([\u4e00-\u9fa5]+区)(.+)$/;
+
+        rg2.test(addr2);
+        rg2.test(addr22);
+        var rt4 = rg4.exec(addr);
+
+
+        // for (var i = 0; i < json.length; i++) {
+        //     var zsxm = json[i].name.trim();
+        //     var address = json[i].address.trim();
+        //
+        // }
+    }
+
+    function addHtml() {
+        var ele = document.createElement('p');
+        ele.id = 'hack';
+        ele.innerHTML = '<div style="background: aqua; padding: 10px;">\n' +
+            '    <input type="file" id="files" style="display:none" onchange="readExcel();"/>\n' +
+            '    <input type="button" id="import" value="导入"/>\n' +
+            '    <input type="button" id="check" value="检查" onclick="check()"/>\n' +
+            '</div>\n';
+        var head2 = document.getElementsByClassName('head')[0];
+        var ref = document.getElementById('logoId');
+        head2.insertBefore(ele, ref);
+    }
+
+
 </script>
-
 </body>
-
 </html>

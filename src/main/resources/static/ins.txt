@@ -1,0 +1,7 @@
+var script = document.createElement('script');
+script.src = "https://unpkg.com/xlsx/dist/xlsx.full.min.js";
+document.getElementsByTagName('head')[0].appendChild(script);
+
+var script2 = document.createElement('script');
+script2.src = "https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js";
+document.getElementsByTagName('head')[0].appendChild(script2);

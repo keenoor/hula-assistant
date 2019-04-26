@@ -75,18 +75,25 @@
 
     function handleCity() {
         var addr = '浙江省杭州市西湖区文三西路100号';
-        var addr2 = '北京市海淀区人大附中';
-        var addr22 = '重庆市市奉节县船夫村';
-        var addr3 = '湖北省孝感市安陆市小河乡';
+        var addr2 = '湖北省孝感市安陆市小河乡';
+        var addr5 = '西藏自治区';
 
-        var rg = /^[\u4e00-\u9fa5]{2,3}省[\u4e00-\u9fa5]+市[\u4e00-\u9fa5]+市.+$/;
-        var rg2 = /^[\u4e00-\u9fa5]{2}市[\u4e00-\u9fa5]+([区县]).+$/;
+        var addr3 = '北京市海淀区人大附中';
+        var addr4 = '重庆市市奉节县船夫村';
+
+
+        var rg = /^([\u4e00-\u9fa5]{2,3}省)([\u4e00-\u9fa5]+市)([\u4e00-\u9fa5]+[区市])(.+)$/;
+        var rg2 = /^([\u4e00-\u9fa5]{2}市)([\u4e00-\u9fa5]+[区县])(.+)$/;
         var rg3 = /^[\u4e00-\u9fa5]{2,3}省[\u4e00-\u9fa5]+市[\u4e00-\u9fa5]+市.+$/;
-        var rg4 = /^([\u4e00-\u9fa5]{2,3}省)([\u4e00-\u9fa5]+市)([\u4e00-\u9fa5]+区)(.+)$/;
 
-        rg2.test(addr2);
-        rg2.test(addr22);
-        var rt4 = rg4.exec(addr);
+
+        rg.test(addr);
+        rg.test(addr2);
+
+        rg2.test(addr3);
+        rg2.test(addr4);
+
+
 
 
         // for (var i = 0; i < json.length; i++) {

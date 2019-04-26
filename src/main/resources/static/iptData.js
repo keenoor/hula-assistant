@@ -1,13 +1,12 @@
 // import excel
-// var script = document.createElement('script');
-// script.src = "https://unpkg.com/xlsx/dist/xlsx.full.min.js";
-// document.getElementsByTagName('head')[0].appendChild(script);
+var script = document.createElement('script');
+script.src = "https://unpkg.com/xlsx/dist/xlsx.full.min.js";
+document.getElementsByTagName('head')[0].appendChild(script);
 
 // 调试用
-var bufflmrs = [];
-var myarraystr = '[';
+// var bufflmrs = [];
+// var myarraystr = '[';
 
-//
 
 function addHtml() {
     var ele = document.createElement('p');
@@ -31,8 +30,8 @@ function addHtml() {
     head2.insertBefore(ele, ref);
 }
 
-//////////// 调试
-// addHtml();
+//////////// 生产
+addHtml();
 ///////////
 
 $("#import").click(function () {
@@ -86,6 +85,7 @@ function check() {
     }
 }
 
+// 导入数据
 function iptData() {
     if (json.length !== addrCodes.length) {
         alert('地址拆分与身份 数量不匹配, json: ' + json.length + 'addrs: ' + addrCodes.length);
@@ -126,6 +126,7 @@ function iptData() {
             myarraystr += ']';
         }
     }
+    $("#personcount").html(json.length);
     alert('数据导入成功，总数量为：' + json.length);
 }
 

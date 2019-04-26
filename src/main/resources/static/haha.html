@@ -6,117 +6,26 @@
 
     <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
+    <script src="http://wsxf.gjxfj.gov.cn/zfp/webroot/jiaob/xzqh.js?"></script>
 </head>
 
 <body>
-<div style="background: aqua; padding: 10px;">
+<div style="background: rosybrown; padding: 10px;">
     <input type="file" id="files" style="display:none" onchange="readExcel();"/>
-    <input type="button" id="import" value="导入"/>
-    <input type="button" id="check" value="检查" onclick="check()"/>
+    <input type="button" id="import" value="1.导入"/>
+    <input type="button" id="check" value="2.检查身份证号" onclick="check()"/>
+    <input type="button" id="handleAddr" value="3.地址切分编号" onclick="handleAddr()"/>
+    <input type="button" id="iptData" value="4.填写数据" onclick="iptData()"/>
+    <ol>
+        <li>操作步骤：</li>
+        <li>导入excel</li>
+        <li>检查身份证姓名的匹配，注意观察日志</li>
+        <li>地址切分编号，注意观察日志</li>
+        <li>若检查不通过，请修改 excel 数据再试</li>
+    </ol>
 </div>
 
-<script type="text/javascript">
-    document.write("操作步骤：");
-    // document.write("1. 导入excel");
-    // document.write("2. 检查身份证姓名的匹配，注意观察日志");
-    // document.write("3. 检查住址规范，注意观察日志");
-    // document.write("4. 填写并保存");
-    // document.write("5. 若检查不通过，请修改 excel 数据再试");
-
-    var json = '';
-
-    $("#import").click(function () {
-        $("#files").click();
-    });
-
-    function readExcel() {
-        console.log('dfghjkljhgfhjkhgfdgh');
-        var selectedFile = document.getElementById("files").files[0];//获取读取的File对象
-        var name = selectedFile.name;
-        var size = selectedFile.size;
-        console.log("文件名: " + name + "大小：" + size);
-
-        var reader = new FileReader();
-        reader.readAsBinaryString(selectedFile);
-        reader.onload = function () {
-            var workbook = XLSX.read(this.result, {type: 'binary'});
-            // console.log(workbook);
-            var sheetNames = workbook.SheetNames;
-            var worksheet = workbook.Sheets[sheetNames[0]];
-            json = XLSX.utils.sheet_to_json(worksheet);
-            console.log(json);
-        };
-    }
-
-    function check() {
-        for (var i = 0; i < json.length; i++) {
-            var zsxm = json[i].name.trim();
-            var card = json[i].card.trim();
-            var address = json[i].address.trim();
-
-            $.ajax({
-                type: "post",
-                url: "/zfp/com/loginoutservice/checkmessage",
-                data: {
-                    card: card,
-                    zsxm: zsxm
-                },
-                async: false,
-                success: function (data) {
-                    if (data === 'OK') {
-                        console.log(i + 1 + ' 检验成功-> ' + zsxm + '\n');
-                    } else {
-                        console.error(i + 1 + ' 检验失败-> ' + zsxm + '\n');
-                    }
-                }
-            });
-        }
-    }
-
-    function handleCity() {
-        var addr = '浙江省杭州市西湖区文三西路100号';
-        var addr2 = '湖北省孝感市安陆市小河乡';
-        var addr5 = '西藏自治区';
-
-        var addr3 = '北京市海淀区人大附中';
-        var addr4 = '重庆市市奉节县船夫村';
-
-
-        var rg = /^([\u4e00-\u9fa5]{2,3}省)([\u4e00-\u9fa5]+市)([\u4e00-\u9fa5]+[区市])(.+)$/;
-        var rg2 = /^([\u4e00-\u9fa5]{2}市)([\u4e00-\u9fa5]+[区县])(.+)$/;
-        var rg3 = /^[\u4e00-\u9fa5]{2,3}省[\u4e00-\u9fa5]+市[\u4e00-\u9fa5]+市.+$/;
-
-
-        rg.test(addr);
-        rg.test(addr2);
-
-        rg2.test(addr3);
-        rg2.test(addr4);
-
-
-
-
-        // for (var i = 0; i < json.length; i++) {
-        //     var zsxm = json[i].name.trim();
-        //     var address = json[i].address.trim();
-        //
-        // }
-    }
-
-    function addHtml() {
-        var ele = document.createElement('p');
-        ele.id = 'hack';
-        ele.innerHTML = '<div style="background: aqua; padding: 10px;">\n' +
-            '    <input type="file" id="files" style="display:none" onchange="readExcel();"/>\n' +
-            '    <input type="button" id="import" value="导入"/>\n' +
-            '    <input type="button" id="check" value="检查" onclick="check()"/>\n' +
-            '</div>\n';
-        var head2 = document.getElementsByClassName('head')[0];
-        var ref = document.getElementById('logoId');
-        head2.insertBefore(ele, ref);
-    }
-
-
+<script src="iptData.js" type="text/javascript">
 </script>
 </body>
 </html>

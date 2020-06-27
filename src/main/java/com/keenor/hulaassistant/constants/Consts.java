@@ -11,7 +11,7 @@ public class Consts {
     // 羽毛球场地代号
     public static final String ORG = "59cb5c718e1e92a702eca340";
 
-    public static final String VENUE = "59cc969742fa6b6703843bbe";
+    public static final String VENUE = "5ed46e7ae63a8122244dc23e";
 
     public static final String ITEM = "59cc95c342fa6b6703843bb9";
 

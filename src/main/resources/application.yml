@@ -8,5 +8,5 @@ server:
   port: 8848
 
 keenor:
-  start-cron: 50 59 6 ? * 1,2,3
-  end-cron: 0 1 7 ? * 1,2,3
+  start-cron: 50 59 6 ? * 3
+  end-cron: 0 1 7 ? * 3

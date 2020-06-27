@@ -42,8 +42,8 @@ public class BookingService {
     @Resource
     ReqHandler reqHandler;
 
-    private final static int TIME_1 = 18;
-    private final static int TIME_2 = 19;
+    private final static int TIME_1 = 17;
+    private final static int TIME_2 = 18;
 
     public Long getTodayTime() {
         return reqHandler.getNowTime();
